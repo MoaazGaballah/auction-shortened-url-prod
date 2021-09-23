@@ -8,8 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -18,32 +16,28 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<Object> signup(@Valid @RequestBody User usr) {
-        try{
+    public ResponseEntity<Object> signup(@RequestBody User usr) {
 
-            userService.kaydet(usr);
-            return new ResponseEntity<>("Üye kaydınız başarılıyla alınmıştır.", HttpStatus.OK);
-
-        } catch (Exception e){
-            return new ResponseEntity<>("Üye kaydınız başarısızdır, Lütfen Parametrelerinizi tekrar Doğrulayın!", HttpStatus.INTERNAL_SERVER_ERROR);
+        String durum = "Üye kaydınız başarısızdır, Lütfen Parametrelerinizi tekrar Doğrulayın!";
+        try {
+            durum = userService.kaydet(usr);
+            return new ResponseEntity<>(durum, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(durum, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
 
-
     @GetMapping("/login")
-    public ResponseEntity<Object> login (@RequestBody UserInfo userInfo){
-        try {
-            User user = userService.getUser(userInfo);
-
-            if (user.getPassword().equals(userInfo.getPassword()))
-                return new ResponseEntity<>("Giriş Başarıyla yapıldı!", HttpStatus.OK);
-
-            return new ResponseEntity<>("Hatalı email yada şifre, Lütfen Tekrar Kontrol ediniz.", HttpStatus.OK);
+    public ResponseEntity<Object> login(@RequestBody UserInfo userInfo) {
+        String durum = "Giriş işleminiz başarısızdır, Lütfen Parametrelerinizi tekrar Doğrulayın!";
+        try{
+            durum = userService.login(userInfo);
+            return new ResponseEntity<>(durum, HttpStatus.OK);
         } catch (Exception e){
-            return new ResponseEntity<>("Lütfen Parametrelerinizi Doğrulayın!", HttpStatus.INTERNAL_SERVER_ERROR);
-
+            return new ResponseEntity<>(durum, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
     }
 }
 

@@ -64,9 +64,12 @@ public class UrlService {
         }
     }
 
-    public String openBrowser(Url url) {
+    public String openBrowser(String strUrl) {
         try {
 
+            Url url = urlRepository.findByShortUrl(strUrl);
+
+            if (url == null) return "Göndermiş olduğunuz url yi tekrar kontrol ediniz";
             // İşletim sistemi kontrol etme
             String os = this.whichOperatingSystem();
 
@@ -84,7 +87,7 @@ public class UrlService {
             return status;
 
         } catch (Exception e) {
-            return "URL yönlendirme işleminiz başarısızdır, Lütfen Parametrelerinizi tekrar Doğrulayın!";
+            return "Göndermiş olduğunuz url yi tekrar kontrol ediniz";
         }
     }
 
