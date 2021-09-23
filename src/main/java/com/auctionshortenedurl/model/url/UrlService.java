@@ -35,10 +35,6 @@ public class UrlService {
         urlRepository.save(url);
     }
 
-    public Url getUrlByEmail(String strUrl) {
-        return this.urlRepository.findByShortUrl(strUrl);
-    }
-
     public Url shortenUrl(Url url) {
 
         char[] result = new char[NUM_CHARS_SHORT_LINK];
@@ -65,6 +61,7 @@ public class UrlService {
     }
 
     public String openBrowser(String strUrl) {
+        String status = "Cihazınız sağlayamdığından, URL yönlendirme işleminiz başarısızdır! \\n\\nLütfen farklı cihazdan deneyiniz...";
         try {
 
             Url url = urlRepository.findByShortUrl(strUrl);
@@ -76,7 +73,6 @@ public class UrlService {
             // döneceğimiz durum
             // ilk başta cihaz desteklemiyor olacak
             // alltakilerden herhangi bir cihaza sahipse, o durum değişmiş olacak
-            String status = "Cihazınız sağlayamdığından, URL yönlendirme işleminiz başarısızdır! \\n\\nLütfen farklı cihazdan deneyiniz...";
 
             if (os.indexOf("win") >= 0)
                 status = this.openBrowserInWindows(url);
@@ -85,7 +81,6 @@ public class UrlService {
             else if (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0)
                 status = this.openBrowserInLinux(url);
             return status;
-
         } catch (Exception e) {
             return "Göndermiş olduğunuz url yi tekrar kontrol ediniz";
         }

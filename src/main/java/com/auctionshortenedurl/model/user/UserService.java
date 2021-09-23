@@ -1,5 +1,6 @@
 package com.auctionshortenedurl.model.user;
 
+import com.auctionshortenedurl.exception.BadRequestException;
 import com.auctionshortenedurl.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class UserService {
                 return "Üye kaydınız başarılıyla alınmıştır.";
             }
         }
-        return "Bir eposta ile tek bir kayıt yapabilirsiniz";
+        return "Bu eposta" + user.getEmail() + " daha önce kullanılmıştır";
     }
 
     public String login(UserInfo userInfo){
